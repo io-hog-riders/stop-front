@@ -9,7 +9,7 @@
 	<title>STOPFINDER - Planner</title>
 </svelte:head>
 
-<div class="relative h-screen w-full">
+<div class="relative h-screen w-full overflow-hidden">
 	<TopAppBar />
 	<SideNavBar />
 	<InteractiveMap />
