@@ -4,17 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b249c6af-5152-432d-a188-30476d726a8e" name="Changes" comment="add project files">
-      <change afterPath="$PROJECT_DIR$/AGENTS.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DESIGN.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/components/InteractiveMap.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/components/MobileNavigation.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/components/SideNavBar.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/components/TopAppBar.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/routes/map/+page.svelte" afterDir="false" />
+    <list default="true" id="b249c6af-5152-432d-a188-30476d726a8e" name="Changes" comment="add maplibre map display and welcome screen prototype">
+      <change afterPath="$PROJECT_DIR$/src/lib/components/map/ActiveScanOverlay.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/components/map/CoordinatesOverlay.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/components/map/MapControls.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/components/map/TripDataOverlay.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/components/welcome/WelcomeBottomActions.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/components/welcome/WelcomeProgress.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/components/welcome/WelcomeSideRail.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/components/welcome/WelcomeTopBar.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/components/welcome/steps/AccountStep.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/components/welcome/steps/ExperienceStep.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/components/welcome/steps/IdentityStep.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/components/welcome/steps/VehicleStep.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/routes/welcome/+layout.svelte" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/routes/welcome/+page.svelte" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bun.lock" beforeDir="false" afterPath="$PROJECT_DIR$/bun.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/InteractiveMap.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/InteractiveMap.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/components/TopAppBar.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/components/TopAppBar.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/+page.svelte" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/layout.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/layout.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/map/+page.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/map/+page.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,8 +43,8 @@
   </component>
   <component name="CopilotUserSelectedModel">
     <selectedModels>
-      <entry key="chat-panel" value="Gemini 3.1 Pro" />
-      <entry key="agent-panel" value="Gemini 3.1 Pro" />
+      <entry key="chat-panel" value="Gemini 3 Flash (Preview)" />
+      <entry key="agent-panel" value="Gemini 3 Flash (Preview)" />
     </selectedModels>
   </component>
   <component name="Git.Settings">
@@ -65,7 +77,7 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "kuba/map",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -99,7 +111,8 @@
       <updated>1774462370681</updated>
       <workItem from="1774462371861" duration="223000" />
       <workItem from="1774462612653" duration="1228000" />
-      <workItem from="1774464059454" duration="3650000" />
+      <workItem from="1774464059454" duration="5668000" />
+      <workItem from="1774694269692" duration="4952000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -137,7 +150,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
     <MESSAGE value="add project files" />
-    <option name="LAST_COMMIT_MESSAGE" value="add project files" />
+    <MESSAGE value="add maplibre map display and welcome screen prototype" />
+    <option name="LAST_COMMIT_MESSAGE" value="add maplibre map display and welcome screen prototype" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
