@@ -1,4 +1,5 @@
 <script lang="ts">
+	import LocationEntry from './sidebar/LocationEntry.svelte';
 	import StopConfigEntry from './sidebar/StopConfigEntry.svelte';
 </script>
 
@@ -33,34 +34,8 @@
 		<div class="space-y-6 p-6">
 			<!-- Location Inputs -->
 			<div class="space-y-4">
-				<div class="space-y-1">
-					<label class="font-label text-xs font-bold tracking-widest text-primary uppercase"
-						>Start Point</label
-					>
-					<div class="relative">
-						<input
-							class="w-full border-[3px] border-outline bg-surface-container-highest p-3 font-headline text-sm text-white outline-none focus:border-primary focus:ring-0"
-							type="text"
-							value="DETROIT, MI"
-						/>
-						<span class="material-symbols-outlined absolute top-3 right-3 text-outline"
-							>my_location</span
-						>
-					</div>
-				</div>
-				<div class="space-y-1">
-					<label class="font-label text-xs font-bold tracking-widest text-primary uppercase"
-						>Destination</label
-					>
-					<div class="relative">
-						<input
-							class="w-full border-[3px] border-outline bg-surface-container-highest p-3 font-headline text-sm text-white outline-none focus:border-primary focus:ring-0"
-							placeholder="ENTER CITY..."
-							type="text"
-						/>
-						<span class="material-symbols-outlined absolute top-3 right-3 text-outline">flag</span>
-					</div>
-				</div>
+				<LocationEntry label="Start point" value="Kraków, PL" />
+				<LocationEntry label="Destination" symbol="flag" />
 			</div>
 			<!-- Max Journey Deviation -->
 			<div class="space-y-2 pt-2">
