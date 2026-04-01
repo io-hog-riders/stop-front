@@ -1,4 +1,5 @@
 <script lang="ts">
+	import StopConfigEntry from './sidebar/StopConfigEntry.svelte';
 </script>
 
 <aside
@@ -82,141 +83,9 @@
 				<h3 class="font-headline text-sm font-black tracking-tighter text-primary uppercase">
 					Individual Stop Config
 				</h3>
-				<!-- Stop 1 -->
-				<div class="space-y-2 border-2 border-surface-variant bg-surface-container-low p-3">
-					<div class="mb-1 flex items-center justify-between">
-						<span class="font-label text-[10px] font-bold text-white uppercase opacity-70"
-							>Stop 01</span
-						>
-						<span class="material-symbols-outlined text-[16px] text-primary">circle</span>
-					</div>
-					<div class="mb-2 space-y-1">
-						<label
-							class="font-label text-[9px] font-bold tracking-widest text-primary uppercase opacity-80"
-							>At Journey Point</label
-						>
-						<div class="flex gap-1">
-							<input
-								class="w-full border-2 border-outline bg-black p-1.5 font-headline text-[10px] text-white uppercase outline-none focus:border-primary focus:ring-0"
-								type="number"
-								value="50"
-							/>
-							<select
-								class="appearance-none border-2 border-outline bg-black p-1.5 font-headline text-[10px] text-white uppercase outline-none focus:border-primary"
-							>
-								<option selected>KM</option>
-								<option>HR</option>
-							</select>
-						</div>
-					</div>
-					<div class="grid grid-cols-2 gap-2">
-						<select
-							class="appearance-none border-2 border-outline bg-black p-1.5 font-headline text-[10px] text-white uppercase outline-none focus:border-primary"
-						>
-							<option>15 MIN</option>
-							<option selected>30 MIN</option>
-							<option>1 HR</option>
-						</select>
-						<select
-							class="appearance-none border-2 border-outline bg-black p-1.5 font-headline text-[10px] text-white uppercase outline-none focus:border-primary"
-						>
-							<option selected>Restaurant</option>
-							<option>Cafe</option>
-							<option>Park</option>
-							<option>Fuel</option>
-						</select>
-					</div>
-				</div>
-				<!-- Stop 2 -->
-				<div class="space-y-2 border-2 border-surface-variant bg-surface-container-low p-3">
-					<div class="mb-1 flex items-center justify-between">
-						<span class="font-label text-[10px] font-bold text-white uppercase opacity-70"
-							>Stop 02</span
-						>
-						<span class="material-symbols-outlined text-[16px] text-secondary">circle</span>
-					</div>
-					<div class="mb-2 space-y-1">
-						<label
-							class="font-label text-[9px] font-bold tracking-widest text-primary uppercase opacity-80"
-							>At Journey Point</label
-						>
-						<div class="flex gap-1">
-							<input
-								class="w-full border-2 border-outline bg-black p-1.5 font-headline text-[10px] text-white uppercase outline-none focus:border-primary focus:ring-0"
-								type="number"
-								value="50"
-							/>
-							<select
-								class="appearance-none border-2 border-outline bg-black p-1.5 font-headline text-[10px] text-white uppercase outline-none focus:border-primary"
-							>
-								<option selected>KM</option>
-								<option>HR</option>
-							</select>
-						</div>
-					</div>
-					<div class="grid grid-cols-2 gap-2">
-						<select
-							class="appearance-none border-2 border-outline bg-black p-1.5 font-headline text-[10px] text-white uppercase outline-none focus:border-primary"
-						>
-							<option>15 MIN</option>
-							<option>30 MIN</option>
-							<option>1 HR</option>
-						</select>
-						<select
-							class="appearance-none border-2 border-outline bg-black p-1.5 font-headline text-[10px] text-white uppercase outline-none focus:border-primary"
-						>
-							<option>Restaurant</option>
-							<option>Cafe</option>
-							<option selected>Park</option>
-							<option>Fuel</option>
-						</select>
-					</div>
-				</div>
-				<!-- Stop 3 -->
-				<div class="space-y-2 border-2 border-surface-variant bg-surface-container-low p-3">
-					<div class="mb-1 flex items-center justify-between">
-						<span class="font-label text-[10px] font-bold text-white uppercase opacity-70"
-							>Stop 03</span
-						>
-						<span class="material-symbols-outlined text-[16px] text-primary">circle</span>
-					</div>
-					<div class="mb-2 space-y-1">
-						<label
-							class="font-label text-[9px] font-bold tracking-widest text-primary uppercase opacity-80"
-							>At Journey Point</label
-						>
-						<div class="flex gap-1">
-							<input
-								class="w-full border-2 border-outline bg-black p-1.5 font-headline text-[10px] text-white uppercase outline-none focus:border-primary focus:ring-0"
-								type="number"
-								value="50"
-							/>
-							<select
-								class="appearance-none border-2 border-outline bg-black p-1.5 font-headline text-[10px] text-white uppercase outline-none focus:border-primary"
-							>
-								<option selected>KM</option>
-								<option>HR</option>
-							</select>
-						</div>
-					</div>
-					<div class="grid grid-cols-2 gap-2">
-						<select
-							class="appearance-none border-2 border-outline bg-black p-1.5 font-headline text-[10px] text-white uppercase outline-none focus:border-primary"
-						>
-							<option>15 MIN</option>
-							<option>30 MIN</option>
-							<option selected>1 HR</option>
-						</select>
-						<select
-							class="appearance-none border-2 border-outline bg-black p-1.5 font-headline text-[10px] text-white uppercase outline-none focus:border-primary"
-						>
-							<option>Restaurant</option>
-							<option>Cafe</option>
-							<option>Park</option>
-							<option selected>Fuel</option>
-						</select>
-					</div>
-				</div>
+				<StopConfigEntry index="01" stop_time='30 MIN' stop_type='Restaurant' />
+				<StopConfigEntry index="02" stop_time='15 MIN' stop_type='Park' />
+				<StopConfigEntry index="03" stop_time='1 HR' stop_type='Fuel' />
 			</div>
 		</div>
 	</div>
