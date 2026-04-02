@@ -1,5 +1,6 @@
 <script lang="ts">
 	import LocationEntry from './sidebar/LocationEntry.svelte';
+	import SideBarTab from './sidebar/SideBarTab.svelte';
 	import StopConfigEntry from './sidebar/StopConfigEntry.svelte';
 </script>
 
@@ -15,20 +16,8 @@
 	<div class="custom-scrollbar flex-1 overflow-y-auto">
 		<!-- Navigation Links -->
 		<div class="flex flex-col">
-			<a
-				class="flex w-full items-center gap-4 border-b border-black bg-primary p-4 font-black text-black"
-				href="/map"
-			>
-				<span class="material-symbols-outlined">route</span>
-				<span class="font-headline text-sm font-bold uppercase">Route</span>
-			</a>
-			<a
-				class="flex w-full items-center gap-4 border-b border-surface-variant p-4 text-white transition-none hover:bg-secondary hover:text-white"
-				href="/map"
-			>
-				<span class="material-symbols-outlined">pin_drop</span>
-				<span class="font-headline text-sm font-bold uppercase">Stops</span>
-			</a>
+			<SideBarTab title="Route" symbol="route" href="/map" selected />
+			<SideBarTab title="Stops" symbol="pin_drop" href="/map" />
 		</div>
 		<!-- Input Controls -->
 		<div class="space-y-6 p-6">
