@@ -1,42 +1,34 @@
-# sv
+# STOP - Smart Travel Over Points (frontend)
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+## Overview
 
-## Creating a project
+This is the frontend code for STOP, a travel planning app that helps users find the best stops along their route.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Getting started
 
-```sh
-# create a new project
-npx sv create my-app
-```
-
-To recreate this project with the same configuration:
+This project utilizes bun as the package manager. If you don't have bun installed, please refer to [bun.sh](https://bun.sh/).
 
 ```sh
-# recreate this project
-bun x sv@0.13.0 create --template minimal --types ts --add prettier eslint tailwindcss="plugins:typography,forms" sveltekit-adapter="adapter:auto" mcp="ide:gemini+setup:remote" --install bun ./
+# install the dependencies
+bun install
 ```
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+To run the development server:
 
 ```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+bun run dev
 ```
 
-## Building
-
-To create a production version of your app:
-
+## Building the project
+To build the project for production:
 ```sh
-npm run build
+# build the project
+bun run build
+
+# preview the production build
+bun run preview
 ```
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+> To deploy this app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+> For example, to deploy on Vercel, you can install the `@sveltejs/adapter-vercel` package and update your `svelte.config.js` file accordingly.
+> By default, this project is configured to use the `@sveltejs/adapter-auto` adapter, which automatically selects the appropriate adapter based on the environment.
