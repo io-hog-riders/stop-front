@@ -14,6 +14,7 @@
 
 	let pathPoints = $state<Array<[number, number]>>([]);
 	let routeStops = $state<RouteStop[]>([]);
+	let selectedRouteStops = $state<RouteStop[]>([]);
 
 	// this all should have its own types defined somewhere, but for now we can just use any
 	let extractPathPoints = (data: any): Array<[number, number]> => {
@@ -23,6 +24,10 @@
 		}
 		return data.route.points.map((point: any) => [point.lng, point.lat] as [number, number]);
 	};
+
+	function handleSelectedRouteStopsChange(nextSelectedRouteStops: RouteStop[]) {
+		selectedRouteStops = nextSelectedRouteStops;
+	}
 
 	let extractSuggestedStops = (data: any): RouteStop[] => {
 		if (!data || !data.suggestedStops) {
@@ -72,6 +77,7 @@
 			fetchStatus = 'Route preview fetched successfully!';
 			pathPoints = extractPathPoints(data);
 			routeStops = extractSuggestedStops(data);
+			selectedRouteStops = [];
 		} catch (error) {
 			const details = error instanceof Error ? error.message : 'Unknown error';
 			fetchStatus = `Could not fetch route preview: ${details}`;
@@ -88,7 +94,11 @@
 
 <div class="relative h-screen w-full overflow-hidden">
 	<TopAppBar />
-	<SideNavBar onCalculatePath={handleCalculatePath} />
-	<InteractiveMap pathPoints={pathPoints} routeStops={routeStops} />
+	<SideNavBar onCalculatePath={handleCalculatePath} {selectedRouteStops} {pathPoints} />
+	<InteractiveMap
+		pathPoints={pathPoints}
+		routeStops={routeStops}
+		onSelectedRouteStopsChange={handleSelectedRouteStopsChange}
+	/>
 	<MobileNavigation />
 </div>

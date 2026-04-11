@@ -7,8 +7,13 @@
 	import StopSelectionNotifications from './map/StopSelectionNotifications.svelte';
 	import type { RouteStop } from '$lib/types/mapTypes';
 
-	let { pathPoints, routeStops }: { pathPoints: Array<[number, number]>; routeStops: RouteStop[] } =
-		$props();
+	type Props = {
+		pathPoints: Array<[number, number]>;
+		routeStops: RouteStop[];
+		onSelectedRouteStopsChange?: (selectedStops: RouteStop[]) => void;
+	};
+
+	let { pathPoints, routeStops, onSelectedRouteStopsChange }: Props = $props();
 	let selectedRouteStops: RouteStop[] = $state([]);
 	let stopSelectionEventId = 0;
 	let latestStopSelectionEvent: {
@@ -27,9 +32,11 @@
 		);
 
 		if (isAlreadySelected) {
-			selectedRouteStops = selectedRouteStops.filter(
+			const nextSelectedRouteStops = selectedRouteStops.filter(
 				(selectedStop) => selectedStop.identifier.id !== stop.identifier.id
 			);
+			selectedRouteStops = nextSelectedRouteStops;
+			onSelectedRouteStopsChange?.(nextSelectedRouteStops);
 			latestStopSelectionEvent = {
 				id: ++stopSelectionEventId,
 				stopName: stop.identifier.name,
@@ -38,7 +45,9 @@
 			return;
 		}
 
-		selectedRouteStops = [...selectedRouteStops, stop];
+		const nextSelectedRouteStops = [...selectedRouteStops, stop];
+		selectedRouteStops = nextSelectedRouteStops;
+		onSelectedRouteStopsChange?.(nextSelectedRouteStops);
 		latestStopSelectionEvent = {
 			id: ++stopSelectionEventId,
 			stopName: stop.identifier.name,
