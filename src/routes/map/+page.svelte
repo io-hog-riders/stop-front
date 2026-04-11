@@ -60,13 +60,26 @@
 
 		isFetching = true;
 
+		let waypoints = [planningInput.origin];
+		for (const stop of selectedRouteStops) {
+			waypoints.push(stop.identifier.location);
+		}
+		waypoints.push(planningInput.destination);
+
+		let stopsConfig = planningInput.stopConfigs
+
+		let requestBody = {
+			"waypoints": waypoints,
+			"stops_config": stopsConfig,
+		}
+
 		try {
-			const response = await fetch('/test/temp/route/plan', {
+			const response = await fetch('/api/v1/route/plan', {
 				method: 'POST',
 				headers: {
 					'content-type': 'application/json'
 				},
-				body: JSON.stringify(planningInput)
+				body: JSON.stringify(requestBody)
 			});
 
 			if (!response.ok) {
