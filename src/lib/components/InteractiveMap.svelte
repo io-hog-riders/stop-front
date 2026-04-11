@@ -5,14 +5,26 @@
 	import TripDataOverlay from './map/TripDataOverlay.svelte';
 	import MapControls from './map/MapControls.svelte';
 	import CoordinatesOverlay from './map/CoordinatesOverlay.svelte';
-    import StopMarker from './map/StopMarker.svelte';
-    import type { RouteStop } from '$lib/types/mapTypes';
+	import StopMarker from './map/StopMarker.svelte';
+	import type { RouteStop } from '$lib/types/mapTypes';
 
 	let { pathPoints, routeStops }: { pathPoints: Array<[number, number]>; routeStops: RouteStop[] } = $props();
+	let selectedRouteStops: RouteStop[] = [];
 	let mapContainer: HTMLElement;
 	let lng = $state(-87.6298);
 	let lat = $state(41.8781);
 	let mapInstance = $state<maplibregl.Map | null>(null);
+
+	function handleSelectStop(stop: RouteStop) {
+		for (let i = 0; i < selectedRouteStops.length; i++) {
+			if (selectedRouteStops[i] === stop) {
+				selectedRouteStops.splice(i, 1);
+				return;
+			}
+		}
+		selectedRouteStops.push(stop);
+		console.log(selectedRouteStops);
+	}
 
 	$effect(() => {
 		if (!mapContainer) return;
@@ -102,7 +114,7 @@
 		<TripDataOverlay /> -->
 		{#if mapInstance}
 			{#each routeStops as stop (stop.identifier.id)}
-				<StopMarker map={mapInstance} {stop} />
+				<StopMarker map={mapInstance} stop={stop} onSelected={handleSelectStop} />
 			{/each}
 		{/if}
 	</div>

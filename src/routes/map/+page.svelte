@@ -2,7 +2,11 @@
 	import TopAppBar from '$lib/components/TopAppBar.svelte';
 	import SideNavBar from '$lib/components/SideNavBar.svelte';
 	import InteractiveMap from '$lib/components/InteractiveMap.svelte';
+
 	import MobileNavigation from '$lib/components/MobileNavigation.svelte';
+	import { PUBLIC_BACKEND_URL } from '$env/static/public';
+
+
 	import type { RouteStop } from '$lib/types/mapTypes';
 
 	let isFetching = $state(false);
@@ -13,7 +17,7 @@
 
 	// this all should have its own types defined somewhere, but for now we can just use any
 	let extractPathPoints = (data: any): Array<[number, number]> => {
-		if (!data || !data.route.points) {
+		if (!data || !data.route?.points) {
 			console.warn('Invalid data format: missing route.points');
 			return [];
 		}
@@ -25,7 +29,7 @@
 			console.warn('Invalid data format: missing route.suggestedStops');
 			return [];
 		}
-		let routeStops: RouteStop[] = data.suggestedStops.map((stop: any) => ({
+		const mappedStops: RouteStop[] = data.suggestedStops.map((stop: any) => ({
 			detourDistance: stop.detourDistance,
 			detourTime: stop.detourTime,
 			identifier: stop.ident,
@@ -33,14 +37,17 @@
 			rating: stop.rating,
 			website: stop.website,
 		}));
-		return routeStops;
+		return mappedStops;
 	};
 
 
 
 
 	async function handleCalculatePath() {
-		if (isFetching) {
+		if (isFetching) return;
+
+		if (!PUBLIC_BACKEND_URL) {
+			fetchStatus = 'PUBLIC_BACKEND_URL is not configured.';
 			return;
 		}
 
@@ -48,13 +55,12 @@
 		fetchStatus = 'Fetching route preview...';
 
 		try {
-			const response = await fetch('http://localhost:8000/api/mock/route/plan', {
+			const response = await fetch(`${PUBLIC_BACKEND_URL}/api/mock/route/plan`, {
 				method: 'POST',
 				headers: {
 					'content-type': 'application/json'
 				},
-				body: JSON.stringify({
-				})
+				body: JSON.stringify({})
 			});
 
 			if (!response.ok) {

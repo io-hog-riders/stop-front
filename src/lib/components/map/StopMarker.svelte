@@ -5,10 +5,13 @@
 	type Props = {
 		map: maplibregl.Map | null;
 		stop: RouteStop;
+		onSelected?: (stop: RouteStop) => void | Promise<void>;
 	};
 
-	let { map, stop }: Props = $props();
+	let { map, stop, onSelected }: Props = $props();
 	const POPUP_ANIMATION_MS = 180;
+
+	let isSelected: boolean = $state(false)
 
 	function escapeHtml(input: string): string {
 		return input
@@ -38,6 +41,17 @@
 		`;
 	}
 
+	function routePointClick(event: MouseEvent) {
+		const targetElement = event.target as HTMLElement;
+		if (!isSelected) {
+			targetElement.classList.add('marker-selected');
+		} else {
+			targetElement.classList.remove('marker-selected');
+		}
+		isSelected = !isSelected;
+		onSelected?.(stop)
+	}
+
 	$effect(() => {
 		if (!map) {
 			return;
@@ -47,7 +61,7 @@
 		const markerElement = document.createElement('button');
 		markerElement.type = 'button';
 		markerElement.className =
-			'h-6 w-6 border-[3px] border-black bg-secondary shadow-[4px_4px_0px_0px_var(--color-secondary)] hover:cursor-pointer hover:ring-2 hover:ring-primary hover:outline-none hover:z-800 hover:ring-2 hover:ring-primary hover:ring-offset-2 hover:ring-offset-black hover:rounded-full transition-all delay-50 duration-500 ease-in-out';
+			'h-6 w-6 border-[3px] border-black bg-secondary hover:cursor-pointer hover:ring-2 hover:ring-primary hover:outline-none hover:ring-2 hover:ring-primary hover:ring-offset-2 hover:ring-offset-black rounded-full transition-all delay-50 duration-180 ease-in-out';
 		markerElement.setAttribute('aria-label', `Show details for ${stop.identifier.name}`);
 
 		const popup = new maplibregl.Popup({
@@ -116,8 +130,11 @@
 			}, POPUP_ANIMATION_MS);
 		};
 
+
+		// attach events to marker
 		markerElement.addEventListener('mouseenter', showPopup);
 		markerElement.addEventListener('mouseleave', hidePopup);
+		markerElement.addEventListener('click', routePointClick);
 
 		const marker = new maplibregl.Marker({ element: markerElement, anchor: 'bottom' })
 			.setLngLat([lng, lat])
@@ -139,7 +156,11 @@
 </script>
 
 <style>
-    button:hover {
+		:global(.marker-selected) {
+				background: var(--color-primary);
+		}
+
+    :global(button:hover) {
         transition: 0.3s ease-in-out;
     }
 
