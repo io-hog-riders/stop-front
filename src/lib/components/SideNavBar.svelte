@@ -2,6 +2,12 @@
 	import LocationEntry from './sidebar/LocationEntry.svelte';
 	import SideBarTab from './sidebar/SideBarTab.svelte';
 	import StopConfigEntry from './sidebar/StopConfigEntry.svelte';
+	type Props = {
+		onCalculatePath?: () => void | Promise<void>;
+	};
+
+	let { onCalculatePath }: Props = $props();
+
 </script>
 
 <aside
@@ -57,6 +63,7 @@
 	<div class="border-t-[3px] border-primary bg-surface-container-highest p-6">
 		<button
 			class="group relative w-full border-[3px] border-black bg-primary py-4 font-headline text-lg font-black tracking-tighter text-black uppercase transition-transform active:translate-x-1 active:translate-y-1"
+			onclick={() => onCalculatePath?.()}
 		>
 			CALCULATE PATH
 			<div class="absolute inset-0 -z-10 translate-x-1 translate-y-1 bg-black"></div>
