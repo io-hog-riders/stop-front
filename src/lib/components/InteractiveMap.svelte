@@ -148,7 +148,7 @@
 		<MapControls onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} />
 		{#if mapInstance}
 			{#each routeStops as stop (stop.identifier.id)}
-				<StopMarker map={mapInstance} stop={stop} onSelected={handleSelectStop} />
+				<StopMarker map={mapInstance} {stop} onSelected={handleSelectStop} />
 			{/each}
 		{/if}
 	</div>

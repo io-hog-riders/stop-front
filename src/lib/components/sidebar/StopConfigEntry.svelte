@@ -4,7 +4,7 @@
 		journey_point = $bindable(50),
 		journey_point_unit = $bindable('KM'),
 		stop_time = $bindable('30 MIN'),
-		stop_type = $bindable('Restaurant'),
+		stop_type = $bindable('Restaurant')
 	} = $props();
 </script>
 
@@ -16,20 +16,20 @@
 		bg-surface-container-low
 		p-3
 
-		**:uppercase
 		**:text-white
+		**:uppercase
 
+		[&_input]:w-full
+		[&_input]:focus:ring-0
 		[&_input,select]:border-2
 		[&_input,select]:border-outline
 		[&_input,select]:bg-black
 		[&_input,select]:p-1.5
 		[&_input,select]:font-headline
 		[&_input,select]:text-[10px]
+
 		[&_input,select]:outline-none
 		[&_input,select]:focus:border-primary
-
-		[&_input]:w-full
-		[&_input]:focus:ring-0
 
 		[&_select]:appearance-none
 	"
@@ -39,9 +39,7 @@
 		<span class="font-label text-[10px] font-bold opacity-70">
 			Stop {index}
 		</span>
-		<span class="material-symbols-outlined text-[16px] text-primary">
-			circle
-		</span>
+		<span class="material-symbols-outlined text-[16px] text-primary"> circle </span>
 	</div>
 
 	<!-- First row: when to stop? -->

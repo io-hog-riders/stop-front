@@ -1,9 +1,19 @@
 <script lang="ts">
+	type Props = {
+		label: string;
+		value?: string;
+		symbol?: string;
+		onBlurAction?: () => void | Promise<void>;
+		onInputAction?: () => void;
+	};
+
 	let {
 		label,
 		value = $bindable(''),
 		symbol = 'my_location',
-	} = $props()
+		onBlurAction,
+		onInputAction
+	}: Props = $props();
 </script>
 
 <div class="space-y-1">
@@ -28,7 +38,9 @@
 				focus:ring-0
 			"
 			type="text"
-			bind:value={value}
+			bind:value
+			onblur={onBlurAction}
+			oninput={onInputAction}
 			placeholder="Enter location…"
 		/>
 

@@ -11,7 +11,7 @@
 	let { map, stop, onSelected }: Props = $props();
 	const POPUP_ANIMATION_MS = 180;
 
-	let isSelected: boolean = $state(false)
+	let isSelected: boolean = $state(false);
 
 	function escapeHtml(input: string): string {
 		return input
@@ -49,7 +49,7 @@
 			targetElement.classList.remove('marker-selected');
 		}
 		isSelected = !isSelected;
-		onSelected?.(stop)
+		onSelected?.(stop);
 	}
 
 	$effect(() => {
@@ -130,7 +130,6 @@
 			}, POPUP_ANIMATION_MS);
 		};
 
-
 		// attach events to marker
 		markerElement.addEventListener('mouseenter', showPopup);
 		markerElement.addEventListener('mouseleave', hidePopup);
@@ -156,19 +155,19 @@
 </script>
 
 <style>
-		:global(.marker-selected) {
-				background: var(--color-primary);
-		}
+	:global(.marker-selected) {
+		background: var(--color-primary);
+	}
 
-    :global(button:hover) {
-        transition: 0.3s ease-in-out;
-    }
+	:global(button:hover) {
+		transition: 0.3s ease-in-out;
+	}
 
 	:global(.maplibregl-popup.stop-popup .maplibregl-popup-content) {
 		padding: 0;
 		background: transparent;
 		box-shadow: none;
-        z-index: 900;
+		z-index: 900;
 	}
 
 	:global(.maplibregl-popup.stop-popup) {
@@ -196,7 +195,7 @@
 		background: #0a0a0a;
 		padding: 0.75rem;
 		box-shadow: 6px 6px 0 0 var(--color-primary);
-        z-index: 900;
+		z-index: 900;
 	}
 
 	:global(.stop-popup-label) {

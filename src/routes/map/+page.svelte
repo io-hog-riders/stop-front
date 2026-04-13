@@ -6,8 +6,7 @@
 	import MobileNavigation from '$lib/components/MobileNavigation.svelte';
 	import { PUBLIC_BACKEND_URL } from '$env/static/public';
 
-
-	import type { RouteStop } from '$lib/types/mapTypes';
+	import type { PathPlanningInput, RouteStop } from '$lib/types/mapTypes';
 
 	let isFetching = $state(false);
 	let fetchStatus = $state('');
@@ -40,15 +39,12 @@
 			identifier: stop.ident,
 			openingHours: stop.openingHours,
 			rating: stop.rating,
-			website: stop.website,
+			website: stop.website
 		}));
 		return mappedStops;
 	};
 
-
-
-
-	async function handleCalculatePath() {
+	async function handleCalculatePath(planningInput: PathPlanningInput) {
 		if (isFetching) return;
 
 		if (!PUBLIC_BACKEND_URL) {
@@ -60,12 +56,15 @@
 		fetchStatus = 'Fetching route preview...';
 
 		try {
-			const response = await fetch(`${PUBLIC_BACKEND_URL}/api/mock/route/plan`, {
+			const response = await fetch(`${PUBLIC_BACKEND_URL}/api/v1/route/plan`, {
 				method: 'POST',
 				headers: {
 					'content-type': 'application/json'
 				},
-				body: JSON.stringify({})
+				body: JSON.stringify({
+					origin: planningInput.origin,
+					destination: planningInput.destination
+				})
 			});
 
 			if (!response.ok) {
@@ -84,7 +83,6 @@
 		} finally {
 			isFetching = false;
 		}
-
 	}
 </script>
 
@@ -96,8 +94,8 @@
 	<TopAppBar />
 	<SideNavBar onCalculatePath={handleCalculatePath} {selectedRouteStops} {pathPoints} />
 	<InteractiveMap
-		pathPoints={pathPoints}
-		routeStops={routeStops}
+		{pathPoints}
+		{routeStops}
 		onSelectedRouteStopsChange={handleSelectedRouteStopsChange}
 	/>
 	<MobileNavigation />

@@ -18,7 +18,9 @@
 				class="group relative border-4 border-surface-variant bg-[#0e0e0e] p-6 text-left transition-all hover:translate-x-1 hover:translate-y-1 hover:border-primary hover:shadow-[8px_8px_0px_0px_var(--color-primary)] active:scale-95"
 			>
 				<div class="mb-4 flex items-start justify-between">
-					<span class="material-symbols-outlined text-4xl text-secondary group-hover:text-primary">
+					<span
+						class="material-symbols-outlined text-4xl text-secondary group-hover:text-primary"
+					>
 						{opt.icon}
 					</span>
 					<div class="font-mono text-[10px] text-outline">{opt.type}</div>

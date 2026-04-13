@@ -6,7 +6,8 @@
 	class="fixed top-0 z-50 flex h-20 w-full items-center justify-between border-b-[3px] border-primary bg-[#0e0e0e] px-6"
 >
 	<div class="flex items-center gap-8">
-		<span class="font-headline text-3xl font-black tracking-tighter text-primary uppercase italic"
+		<span
+			class="font-headline text-3xl font-black tracking-tighter text-primary uppercase italic"
 			>STOPFINDER</span
 		>
 		<nav class="hidden h-full items-center gap-6 md:flex">

@@ -14,8 +14,8 @@
 				Create <br /> <span class="text-primary">Account</span>
 			</h1>
 			<p class="max-w-md font-label text-[#adaaaa]">
-				Secure your identity on the asphalt. Your credentials grant access to the global haulage
-				network.
+				Secure your identity on the asphalt. Your credentials grant access to the global
+				haulage network.
 			</p>
 		</header>
 		<form class="space-y-6" onsubmit={(e) => e.preventDefault()}>
@@ -56,7 +56,9 @@
 		<div
 			class="neobrutal-shadow relative border-[3px] border-black bg-secondary p-1 shadow-[6px_6px_0px_0px_var(--color-primary)]"
 		>
-			<div class="relative flex aspect-square items-center justify-center overflow-hidden bg-black">
+			<div
+				class="relative flex aspect-square items-center justify-center overflow-hidden bg-black"
+			>
 				<div
 					class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"
 				></div>

@@ -24,13 +24,15 @@
 </script>
 
 <div class="p-6">
-	<h3 class="font-headline text-sm font-black tracking-tighter text-primary uppercase">Route Points</h3>
+	<h3 class="font-headline text-sm font-black tracking-tighter text-primary uppercase">
+		Route Points
+	</h3>
 
 	{#if shouldShowEmptyState}
 		<p
 			in:fade={{ duration: EMPTY_TEXT_ANIMATION_MS }}
 			out:fade={{ duration: EMPTY_TEXT_ANIMATION_MS }}
-			class="mt-3 text-xs text-on-surface-variant uppercase tracking-wide"
+			class="mt-3 text-xs tracking-wide text-on-surface-variant uppercase"
 		>
 			To add route points, please first plan your route.
 		</p>
@@ -43,9 +45,11 @@
 				out:fly={{ x: 12, y: -8, duration: CARD_ANIMATION_MS }}
 				class="border border-primary bg-surface-container-low p-3"
 			>
-				<p class="font-label text-[10px] font-bold tracking-widest text-primary uppercase">Start</p>
+				<p class="font-label text-[10px] font-bold tracking-widest text-primary uppercase">
+					Start
+				</p>
 				<p class="mt-1 font-headline text-sm font-bold text-white uppercase">Route Start</p>
-				<p class="mt-1 text-[10px] text-on-surface-variant uppercase tracking-wide">
+				<p class="mt-1 text-[10px] tracking-wide text-on-surface-variant uppercase">
 					{formatCoordinate(startPoint)}
 				</p>
 			</div>
@@ -59,13 +63,14 @@
 				out:fly={{ x: 12, y: -8, duration: CARD_ANIMATION_MS }}
 				class="border border-tertiary bg-surface-container-low p-3"
 			>
-				<p class="font-label text-[10px] font-bold tracking-widest text-tertiary uppercase">End</p>
+				<p class="font-label text-[10px] font-bold tracking-widest text-tertiary uppercase">
+					End
+				</p>
 				<p class="mt-1 font-headline text-sm font-bold text-white uppercase">Route End</p>
-				<p class="mt-1 text-[10px] text-on-surface-variant uppercase tracking-wide">
+				<p class="mt-1 text-[10px] tracking-wide text-on-surface-variant uppercase">
 					{formatCoordinate(endPoint)}
 				</p>
 			</div>
 		{/if}
 	</div>
 </div>
-

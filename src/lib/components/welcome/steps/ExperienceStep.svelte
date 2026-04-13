@@ -98,7 +98,11 @@
 					>
 					<div>
 						<h5 class="font-headline text-sm font-bold uppercase">{opt.title}</h5>
-						<p class="font-label text-[10px] {opt.active ? 'text-primary' : 'opacity-60'}">
+						<p
+							class="font-label text-[10px] {opt.active
+								? 'text-primary'
+								: 'opacity-60'}"
+						>
 							{opt.desc}
 						</p>
 					</div>

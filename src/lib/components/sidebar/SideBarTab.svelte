@@ -27,7 +27,8 @@
 		gap-4
 		border-b
 		p-4
-		{selected ? 'border-black bg-primary font-black text-black'
+		{selected
+		? 'border-black bg-primary font-black text-black'
 		: 'border-surface-variant text-white transition-none hover:bg-surface-container-highest hover:text-white'}
 	"
 	{href}

@@ -2,16 +2,15 @@
 	import SideBarTab from './sidebar/SideBarTab.svelte';
 	import PlanSideBarTab from '$lib/components/sidebar/sidebar-tabs/PlanSideBarTab.svelte';
 	import RouteSideBarTab from '$lib/components/sidebar/sidebar-tabs/RouteSideBarTab.svelte';
-	import type { RouteStop } from '$lib/types/mapTypes';
+	import type { PathPlanningInput, RouteStop } from '$lib/types/mapTypes';
 	type Props = {
-		onCalculatePath?: () => void | Promise<void>;
+		onCalculatePath?: (planningInput: PathPlanningInput) => void | Promise<void>;
 		selectedRouteStops?: RouteStop[];
 		pathPoints?: Array<[number, number]>;
 	};
 
 	let { onCalculatePath, selectedRouteStops = [], pathPoints = [] }: Props = $props();
 	let selectedTab: 'plan' | 'route' = $state('plan');
-
 </script>
 
 <aside
@@ -46,13 +45,11 @@
 			/>
 		</div>
 	</div>
-	<div class="overflow-scroll custom-scrollbar">
-	{#if selectedTab === 'plan'}
-		<PlanSideBarTab onCalculatePath={onCalculatePath} />
-	{:else}
-		<RouteSideBarTab {selectedRouteStops} {pathPoints} />
-	{/if}
+	<div class="custom-scrollbar overflow-scroll">
+		{#if selectedTab === 'plan'}
+			<PlanSideBarTab {onCalculatePath} />
+		{:else}
+			<RouteSideBarTab {selectedRouteStops} {pathPoints} />
+		{/if}
 	</div>
-
-
 </aside>

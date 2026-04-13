@@ -17,8 +17,8 @@
 		Vehicle <span class="text-primary">Specs</span>
 	</h1>
 	<p class="max-w-xl font-headline text-lg text-white/70">
-		Define your hardware parameters. Consumption and capacity directly impact route calculation and
-		pit stop frequency.
+		Define your hardware parameters. Consumption and capacity directly impact route calculation
+		and pit stop frequency.
 	</p>
 </div>
 
@@ -108,7 +108,9 @@
 			>
 		</div>
 		<div>
-			<h4 class="text-3xl leading-tight font-black uppercase italic">Dynamic Range Analysis</h4>
+			<h4 class="text-3xl leading-tight font-black uppercase italic">
+				Dynamic Range Analysis
+			</h4>
 			<p class="mt-2 font-headline text-sm tracking-wide text-white/60 uppercase">
 				Calculated based on current asphalt temperature and friction coefficients.
 			</p>
@@ -116,7 +118,9 @@
 		<div class="ml-auto flex items-center gap-4 border-l-[3px] border-white/20 pl-8">
 			<div class="text-right">
 				<div class="mb-1 text-xs font-black text-white/50 uppercase">Est. Range</div>
-				<div class="text-5xl font-black tracking-tighter text-secondary-dim">{estRange}KM</div>
+				<div class="text-5xl font-black tracking-tighter text-secondary-dim">
+					{estRange}KM
+				</div>
 			</div>
 		</div>
 	</div>
