@@ -6,9 +6,10 @@
 	type Props = {
 		selectedRouteStops?: RouteStop[];
 		pathPoints?: Array<[number, number]>;
+		routeDistance?: number;
 	};
 
-	let { selectedRouteStops = [], pathPoints = [] }: Props = $props();
+	let { selectedRouteStops = [], pathPoints = [], routeDistance = 0 }: Props = $props();
 
 	const CARD_ANIMATION_MS = 180;
 	const EMPTY_TEXT_ANIMATION_MS = 160;
@@ -68,7 +69,7 @@
 				</p>
 				<p class="mt-1 font-headline text-sm font-bold text-white uppercase">Route End</p>
 				<p class="mt-1 text-[10px] tracking-wide text-on-surface-variant uppercase">
-					{formatCoordinate(endPoint)}
+					{formatCoordinate(endPoint)} · {routeDistance > 0 ? `${(routeDistance / 1000).toFixed(2)} km` : 'Distance N/A'}
 				</p>
 			</div>
 		{/if}

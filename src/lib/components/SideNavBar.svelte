@@ -7,9 +7,10 @@
 		onCalculatePath?: (planningInput: PathPlanningInput) => void | Promise<void>;
 		selectedRouteStops?: RouteStop[];
 		pathPoints?: Array<[number, number]>;
+		routeDistance?: number;
 	};
 
-	let { onCalculatePath, selectedRouteStops = [], pathPoints = [] }: Props = $props();
+	let { onCalculatePath, selectedRouteStops = [], pathPoints = [], routeDistance = 0 }: Props = $props();
 	let selectedTab: 'plan' | 'route' = $state('plan');
 </script>
 
@@ -49,7 +50,7 @@
 		{#if selectedTab === 'plan'}
 			<PlanSideBarTab {onCalculatePath} />
 		{:else}
-			<RouteSideBarTab {selectedRouteStops} {pathPoints} />
+			<RouteSideBarTab {selectedRouteStops} {pathPoints} {routeDistance} />
 		{/if}
 	</div>
 </aside>

@@ -14,6 +14,7 @@
 	let pathPoints = $state<Array<[number, number]>>([]);
 	let routeStops = $state<RouteStop[]>([]);
 	let selectedRouteStops = $state<RouteStop[]>([]);
+	let routeDistance = $state(0);
 
 	// this all should have its own types defined somewhere, but for now we can just use any
 	let extractPathPoints = (data: any): Array<[number, number]> => {
@@ -76,6 +77,7 @@
 			fetchStatus = 'Route preview fetched successfully!';
 			pathPoints = extractPathPoints(data);
 			routeStops = extractSuggestedStops(data);
+			routeDistance = data.route.distance || 0;
 			selectedRouteStops = [];
 		} catch (error) {
 			const details = error instanceof Error ? error.message : 'Unknown error';
@@ -92,7 +94,7 @@
 
 <div class="relative h-screen w-full overflow-hidden">
 	<TopAppBar />
-	<SideNavBar onCalculatePath={handleCalculatePath} {selectedRouteStops} {pathPoints} />
+	<SideNavBar onCalculatePath={handleCalculatePath} {selectedRouteStops} {pathPoints} {routeDistance} />
 	<InteractiveMap
 		{pathPoints}
 		{routeStops}
