@@ -51,11 +51,6 @@
 	async function handleCalculatePath() {
 		if (isFetching) return;
 
-		if (!PUBLIC_BACKEND_URL) {
-			fetchStatus = 'PUBLIC_BACKEND_URL is not configured.';
-			return;
-		}
-
 		isFetching = true;
 		fetchStatus = 'Fetching route preview...';
 
