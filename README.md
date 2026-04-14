@@ -1,42 +1,57 @@
-# sv
+# STOP - Smart Travel Over Points (frontend)
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+## Overview
 
-## Creating a project
+This is the frontend code for STOP, a travel planning app that helps users find the best stops along their route.
 
-If you're seeing this, you've probably already done this step. Congrats!
+### Rules of work in this project:
 
-```sh
-# create a new project
-npx sv create my-app
-```
+- make your changes on separate branches and create pull requests to merge them with `main`
+- summarize your changes in the pull request description and link to any relevant issues or documentation
+- write clear commit messages that describe the changes you've made
+- use `git rebase` to keep your commit history clean and organized
 
-To recreate this project with the same configuration:
+## Getting started
 
-```sh
-# recreate this project
-bun x sv@0.13.0 create --template minimal --types ts --add prettier eslint tailwindcss="plugins:typography,forms" sveltekit-adapter="adapter:auto" mcp="ide:gemini+setup:remote" --install bun ./
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+This project utilizes bun as the package manager. If you don't have bun installed, please refer to [bun.sh](https://bun.sh/).
 
 ```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+# install the dependencies
+bun install
 ```
 
-## Building
-
-To create a production version of your app:
+To run the development server:
 
 ```sh
-npm run build
+bun run dev
 ```
 
-You can preview the production build with `npm run preview`.
+## Building the project
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+To build the project for production:
+
+```sh
+# build the project
+bun run build
+
+# preview the production build
+bun run preview
+```
+
+> To deploy this app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+> For example, to deploy on Vercel, you can install the `@sveltejs/adapter-vercel` package and update your `svelte.config.js` file accordingly.
+> By default, this project is configured to use the `@sveltejs/adapter-auto` adapter, which automatically selects the appropriate adapter based on the environment.
+
+## Route planning backend behavior
+
+The planner now calls the local SvelteKit endpoint at `/api/v1/route/plan`.
+That endpoint orchestrates:
+
+- route geometry fetch from OSRM
+- grouped Overpass queries for configured stop types along percentage anchors of the route
+- ranking based on user-selected priority (`detour_distance`, `detour_time`, or `rating`)
+
+You can optionally override upstream services with server-side env vars:
+
+- `OSRM_URL` (default: `https://router.project-osrm.org`)
+- `OVERPASS_URL` (default: `https://overpass-api.de/api/interpreter`)
