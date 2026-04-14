@@ -40,9 +40,23 @@ export type Coordinates = {
 	lng: number;
 };
 
+export type StopType = 'Restaurant' | 'Cafe' | 'Park' | 'Fuel';
+
+export type RankingPriority = 'detour_distance' | 'detour_time' | 'rating';
+
+export type StopConfig = {
+	id: string;
+	targetPercent: number; // 0-100 of route progress
+	stopDurationMinutes: number;
+	stopType: StopType;
+};
+
 export type PathPlanningInput = {
 	startLocation: string;
 	destinationLocation: string;
 	origin: Coordinates;
 	destination: Coordinates;
+	stopConfigs: StopConfig[];
+	suggestionLimit: number;
+	rankingPriority: RankingPriority;
 };

@@ -5,6 +5,7 @@
 This is the frontend code for STOP, a travel planning app that helps users find the best stops along their route.
 
 ### Rules of work in this project:
+
 - make your changes on separate branches and create pull requests to merge them with `main`
 - summarize your changes in the pull request description and link to any relevant issues or documentation
 - write clear commit messages that describe the changes you've made
@@ -26,7 +27,9 @@ bun run dev
 ```
 
 ## Building the project
+
 To build the project for production:
+
 ```sh
 # build the project
 bun run build
@@ -38,3 +41,17 @@ bun run preview
 > To deploy this app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
 > For example, to deploy on Vercel, you can install the `@sveltejs/adapter-vercel` package and update your `svelte.config.js` file accordingly.
 > By default, this project is configured to use the `@sveltejs/adapter-auto` adapter, which automatically selects the appropriate adapter based on the environment.
+
+## Route planning backend behavior
+
+The planner now calls the local SvelteKit endpoint at `/api/v1/route/plan`.
+That endpoint orchestrates:
+
+- route geometry fetch from OSRM
+- grouped Overpass queries for configured stop types along percentage anchors of the route
+- ranking based on user-selected priority (`detour_distance`, `detour_time`, or `rating`)
+
+You can optionally override upstream services with server-side env vars:
+
+- `OSRM_URL` (default: `https://router.project-osrm.org`)
+- `OVERPASS_URL` (default: `https://overpass-api.de/api/interpreter`)

@@ -2,9 +2,14 @@
 	/* this is the sidebar tab for the planning mode, which allows the user
 	to choose the start/end points and intended stop count
 	 */
-	import StopConfigEntry from '$lib/components/sidebar/StopConfigEntry.svelte';
+	import StopConfigList from '$lib/components/sidebar/StopConfigList.svelte';
 	import LocationEntry from '$lib/components/sidebar/LocationEntry.svelte';
-	import type { Coordinates, PathPlanningInput } from '$lib/types/mapTypes';
+	import type {
+		Coordinates,
+		PathPlanningInput,
+		RankingPriority,
+		StopConfig
+	} from '$lib/types/mapTypes';
 
 	type GeocodeStatus = 'idle' | 'resolving' | 'resolved' | 'not-found' | 'error';
 
@@ -23,6 +28,11 @@
 	let startStatus = $state<GeocodeStatus>('idle');
 	let destinationStatus = $state<GeocodeStatus>('idle');
 	let calculateMessage = $state('');
+	let stopConfigs = $state<StopConfig[]>([]);
+	let rankingPriority = $state<RankingPriority>('detour_distance');
+
+	const DEFAULT_SUGGESTION_LIMIT = 6;
+	const rankingPriorityInputId = 'ranking-priority';
 
 	function clearStartCoordinateIfNeeded() {
 		originCoords = null;
@@ -135,8 +145,24 @@
 
 	async function handleCalculatePathClick() {
 		calculateMessage = '';
+
+		if (!originCoords && startLocation.trim()) {
+			await resolveStartLocation();
+		}
+		if (!destinationCoords && destinationLocation.trim()) {
+			await resolveDestinationLocation();
+		}
+
 		if (!originCoords || !destinationCoords) {
 			calculateMessage = 'Resolve both Start point and Destination before calculating path.';
+			return;
+		}
+
+		const hasInvalidStopConfig = stopConfigs.some(
+			(config) => config.targetPercent < 1 || config.targetPercent > 100
+		);
+		if (hasInvalidStopConfig) {
+			calculateMessage = 'Every stop target must be between 1 and 100 percent.';
 			return;
 		}
 
@@ -144,7 +170,10 @@
 			startLocation,
 			destinationLocation,
 			origin: originCoords,
-			destination: destinationCoords
+			destination: destinationCoords,
+			stopConfigs,
+			suggestionLimit: DEFAULT_SUGGESTION_LIMIT,
+			rankingPriority
 		});
 	}
 </script>
@@ -180,31 +209,24 @@
 				{/if}
 			</div>
 		</div>
-		<!-- Max Journey Deviation -->
-		<div class="space-y-2 pt-2">
-			<div class="flex items-center justify-between">
-				<label class="font-label text-xs font-bold tracking-widest text-primary uppercase"
-					>Max Deviation</label
-				>
-				<span class="font-headline text-xs font-bold text-primary">15 KM / 10 MIN</span>
-			</div>
-			<input
-				class="w-full cursor-pointer accent-primary"
-				max="60"
-				min="5"
-				type="range"
-				value="15"
-			/>
+		<div class="space-y-2 border-t border-surface-variant pt-4">
+			<label
+				for={rankingPriorityInputId}
+				class="font-label text-xs font-bold tracking-widest text-primary uppercase"
+				>Ranking Priority</label
+			>
+			<select
+				id={rankingPriorityInputId}
+				class="w-full border-2 border-outline bg-black p-2 font-headline text-xs text-white uppercase outline-none focus:border-primary"
+				bind:value={rankingPriority}
+			>
+				<option value="detour_distance">Shortest detour distance</option>
+				<option value="detour_time">Shortest detour time</option>
+				<option value="rating">Highest rating</option>
+			</select>
 		</div>
-		<!-- Individual Stop Configuration -->
-		<div class="space-y-4 border-t border-surface-variant pt-4">
-			<h3 class="font-headline text-sm font-black tracking-tighter text-primary uppercase">
-				Individual Stop Config
-			</h3>
-			<StopConfigEntry index="01" stop_time="30 MIN" stop_type="Restaurant" />
-			<StopConfigEntry index="02" stop_time="15 MIN" stop_type="Park" />
-			<StopConfigEntry index="03" stop_time="1 HR" stop_type="Fuel" />
-		</div>
+
+		<StopConfigList bind:stopConfigs />
 	</div>
 	<!-- Sidebar Footer CTA -->
 	<div class="border-t-[3px] border-primary bg-surface-container-highest p-6">
@@ -216,7 +238,7 @@
 			onclick={handleCalculatePathClick}
 		>
 			CALCULATE PATH
-			<div class="absolute inset-0 -z-10 translate-x-1 translate-y-1 bg-black"></div>
+			<span class="absolute inset-0 -z-10 translate-x-1 translate-y-1 bg-black"></span>
 		</button>
 	</div>
 </div>

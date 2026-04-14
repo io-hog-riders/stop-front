@@ -4,37 +4,48 @@
 	import InteractiveMap from '$lib/components/InteractiveMap.svelte';
 
 	import MobileNavigation from '$lib/components/MobileNavigation.svelte';
-	import { PUBLIC_BACKEND_URL } from '$env/static/public';
 
 	import type { PathPlanningInput, RouteStop } from '$lib/types/mapTypes';
+	type RoutePlanResponse = {
+		route?: {
+			points?: Array<{ lng: number; lat: number }>;
+			distance?: number;
+		};
+		suggestedStops?: Array<{
+			detourDistance: number;
+			detourTime: number;
+			ident: RouteStop['identifier'];
+			openingHours: RouteStop['openingHours'];
+			rating: RouteStop['rating'];
+			website: string;
+		}>;
+	};
 
 	let isFetching = $state(false);
-	let fetchStatus = $state('');
 
 	let pathPoints = $state<Array<[number, number]>>([]);
 	let routeStops = $state<RouteStop[]>([]);
 	let selectedRouteStops = $state<RouteStop[]>([]);
 	let routeDistance = $state(0);
 
-	// this all should have its own types defined somewhere, but for now we can just use any
-	let extractPathPoints = (data: any): Array<[number, number]> => {
+	let extractPathPoints = (data: RoutePlanResponse): Array<[number, number]> => {
 		if (!data || !data.route?.points) {
 			console.warn('Invalid data format: missing route.points');
 			return [];
 		}
-		return data.route.points.map((point: any) => [point.lng, point.lat] as [number, number]);
+		return data.route.points.map((point) => [point.lng, point.lat] as [number, number]);
 	};
 
 	function handleSelectedRouteStopsChange(nextSelectedRouteStops: RouteStop[]) {
 		selectedRouteStops = nextSelectedRouteStops;
 	}
 
-	let extractSuggestedStops = (data: any): RouteStop[] => {
+	let extractSuggestedStops = (data: RoutePlanResponse): RouteStop[] => {
 		if (!data || !data.suggestedStops) {
 			console.warn('Invalid data format: missing route.suggestedStops');
 			return [];
 		}
-		const mappedStops: RouteStop[] = data.suggestedStops.map((stop: any) => ({
+		return data.suggestedStops.map((stop) => ({
 			detourDistance: stop.detourDistance,
 			detourTime: stop.detourTime,
 			identifier: stop.ident,
@@ -42,46 +53,34 @@
 			rating: stop.rating,
 			website: stop.website
 		}));
-		return mappedStops;
 	};
 
 	async function handleCalculatePath(planningInput: PathPlanningInput) {
 		if (isFetching) return;
 
-		if (!PUBLIC_BACKEND_URL) {
-			fetchStatus = 'PUBLIC_BACKEND_URL is not configured.';
-			return;
-		}
-
 		isFetching = true;
-		fetchStatus = 'Fetching route preview...';
 
 		try {
-			const response = await fetch(`${PUBLIC_BACKEND_URL}/api/v1/route/plan`, {
+			const response = await fetch('/api/temp/route/plan', {
 				method: 'POST',
 				headers: {
 					'content-type': 'application/json'
 				},
-				body: JSON.stringify({
-					origin: planningInput.origin,
-					destination: planningInput.destination
-				})
+				body: JSON.stringify(planningInput)
 			});
 
 			if (!response.ok) {
 				throw new Error(`Request failed with status ${response.status}`);
 			}
 
-			const data = await response.json();
-			console.log(data);
-			fetchStatus = 'Route preview fetched successfully!';
+			const data = (await response.json()) as RoutePlanResponse;
 			pathPoints = extractPathPoints(data);
 			routeStops = extractSuggestedStops(data);
-			routeDistance = data.route.distance || 0;
+			routeDistance = data.route?.distance || 0;
 			selectedRouteStops = [];
 		} catch (error) {
 			const details = error instanceof Error ? error.message : 'Unknown error';
-			fetchStatus = `Could not fetch route preview: ${details}`;
+			console.error(`Could not fetch route preview: ${details}`);
 		} finally {
 			isFetching = false;
 		}
@@ -94,7 +93,12 @@
 
 <div class="relative h-screen w-full overflow-hidden">
 	<TopAppBar />
-	<SideNavBar onCalculatePath={handleCalculatePath} {selectedRouteStops} {pathPoints} {routeDistance} />
+	<SideNavBar
+		onCalculatePath={handleCalculatePath}
+		{selectedRouteStops}
+		{pathPoints}
+		{routeDistance}
+	/>
 	<InteractiveMap
 		{pathPoints}
 		{routeStops}
