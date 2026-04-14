@@ -1,18 +1,91 @@
-.gemini/
+# Dependencies
+node_modules/
+
+# Build outputs
+.svelte-kit/
+build/
+.output/
+dist/
+
+# Development files
+.env
+.env.*
+!.env.example
+.env.local
+.env.development
+.env.test
+
+# IDE and editor files
 .vscode/
-.editorconfig
-.prettierignore
-.prettierrc
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Version control
 .git/
 .gitignore
+.gitattributes
 
-.svelte-kit/
-node_modules/
-.nmprc
-
-.env.example
-
+# Documentation and project files
+README.md
 AGENTS.md
 DESIGN.md
 GEMINI.md
-README.md
+*.md
+!package.json
+
+# Configuration files (development only)
+.editorconfig
+.prettierrc
+.prettierignore
+.npmrc
+eslint.config.js
+
+# Test files
+**/*.test.ts
+**/*.test.js
+**/*.spec.ts
+**/*.spec.js
+coverage/
+.nyc_output/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+.temp/
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Deployment platforms
+.vercel/
+.netlify/
+.wrangler/
+
+# AI/LLM files
+.gemini/
+.cursor/
+.aider*
+
+# Scripts (if not needed in production)
+script.js
