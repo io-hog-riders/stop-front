@@ -61,7 +61,7 @@
 		isFetching = true;
 
 		try {
-			const response = await fetch('/api/temp/route/plan', {
+			const response = await fetch('/test/temp/route/plan', {
 				method: 'POST',
 				headers: {
 					'content-type': 'application/json'
