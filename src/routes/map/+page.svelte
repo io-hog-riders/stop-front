@@ -5,7 +5,12 @@
 
 	import MobileNavigation from '$lib/components/MobileNavigation.svelte';
 
-	import type { PathPlanningInput, RouteStop } from '$lib/types/mapTypes';
+	import type {
+		PathPlanningInput,
+		RankingPriority,
+		RouteStop,
+		StopConfig
+	} from '$lib/types/mapTypes';
 	type RoutePlanResponse = {
 		route?: {
 			points?: Array<{ lng: number; lat: number }>;
@@ -21,12 +26,31 @@
 		}>;
 	};
 
+	type StopOptionsPayload = {
+		type: StopConfig['stopType'];
+		targetPercent: number;
+		atJourneyMinute: number;
+		maxDetour: number;
+		limit: number;
+		sortBy: 'distance' | 'rating' | 'price';
+	};
+
+	const DEFAULT_MAX_DETOUR_METERS = 5000;
+	const DEFAULT_PER_TYPE_LIMIT = 3;
+
+	function rankingToSortBy(priority: RankingPriority): StopOptionsPayload['sortBy'] {
+		// Backend SortBy supports 'rating' | 'distance' | 'price'; collapse both
+		// detour-based UI options to 'distance' until the backend grows a 'time' value.
+		return priority === 'rating' ? 'rating' : 'distance';
+	}
+
 	let isFetching = $state(false);
 
 	let pathPoints = $state<Array<[number, number]>>([]);
 	let routeStops = $state<RouteStop[]>([]);
 	let selectedRouteStops = $state<RouteStop[]>([]);
 	let routeDistance = $state(0);
+	let lastPlanningInput = $state<PathPlanningInput | null>(null);
 
 	let extractPathPoints = (data: RoutePlanResponse): Array<[number, number]> => {
 		if (!data || !data.route?.points) {
@@ -38,6 +62,9 @@
 
 	function handleSelectedRouteStopsChange(nextSelectedRouteStops: RouteStop[]) {
 		selectedRouteStops = nextSelectedRouteStops;
+		if (lastPlanningInput && !isFetching) {
+			handleCalculatePath(lastPlanningInput);
+		}
 	}
 
 	let extractSuggestedStops = (data: RoutePlanResponse): RouteStop[] => {
@@ -58,15 +85,37 @@
 	async function handleCalculatePath(planningInput: PathPlanningInput) {
 		if (isFetching) return;
 
+		lastPlanningInput = planningInput;
 		isFetching = true;
 
+		let waypoints = [planningInput.origin];
+		for (const stop of selectedRouteStops) {
+			waypoints.push(stop.identifier.location);
+		}
+		waypoints.push(planningInput.destination);
+
+		const sortBy = rankingToSortBy(planningInput.rankingPriority);
+		const stopOptions: StopOptionsPayload[] = planningInput.stopConfigs.map((cfg) => ({
+			type: cfg.stopType,
+			targetPercent: cfg.targetPercent,
+			atJourneyMinute: 0,
+			maxDetour: DEFAULT_MAX_DETOUR_METERS,
+			limit: DEFAULT_PER_TYPE_LIMIT,
+			sortBy
+		}));
+
+		const requestBody = {
+			waypoints,
+			stops_config: { stops: stopOptions }
+		};
+
 		try {
-			const response = await fetch('/test/temp/route/plan', {
+			const response = await fetch('/api/v1/route/plan', {
 				method: 'POST',
 				headers: {
 					'content-type': 'application/json'
 				},
-				body: JSON.stringify(planningInput)
+				body: JSON.stringify(requestBody)
 			});
 
 			if (!response.ok) {
@@ -77,7 +126,6 @@
 			pathPoints = extractPathPoints(data);
 			routeStops = extractSuggestedStops(data);
 			routeDistance = data.route?.distance || 0;
-			selectedRouteStops = [];
 		} catch (error) {
 			const details = error instanceof Error ? error.message : 'Unknown error';
 			console.error(`Could not fetch route preview: ${details}`);
@@ -102,6 +150,7 @@
 	<InteractiveMap
 		{pathPoints}
 		{routeStops}
+		{isFetching}
 		onSelectedRouteStopsChange={handleSelectedRouteStopsChange}
 	/>
 	<MobileNavigation />

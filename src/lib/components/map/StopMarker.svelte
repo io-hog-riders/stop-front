@@ -5,13 +5,12 @@
 	type Props = {
 		map: maplibregl.Map | null;
 		stop: RouteStop;
+		isSelected?: boolean;
 		onSelected?: (stop: RouteStop) => void | Promise<void>;
 	};
 
-	let { map, stop, onSelected }: Props = $props();
+	let { map, stop, isSelected = false, onSelected }: Props = $props();
 	const POPUP_ANIMATION_MS = 180;
-
-	let isSelected: boolean = $state(false);
 
 	function escapeHtml(input: string): string {
 		return input
@@ -41,14 +40,7 @@
 		`;
 	}
 
-	function routePointClick(event: MouseEvent) {
-		const targetElement = event.target as HTMLElement;
-		if (!isSelected) {
-			targetElement.classList.add('marker-selected');
-		} else {
-			targetElement.classList.remove('marker-selected');
-		}
-		isSelected = !isSelected;
+	function routePointClick() {
 		onSelected?.(stop);
 	}
 
@@ -62,6 +54,9 @@
 		markerElement.type = 'button';
 		markerElement.className =
 			'h-6 w-6 border-[3px] border-black bg-secondary hover:cursor-pointer hover:ring-2 hover:ring-primary hover:outline-none hover:ring-2 hover:ring-primary hover:ring-offset-2 hover:ring-offset-black rounded-full transition-all delay-50 duration-180 ease-in-out';
+		if (isSelected) {
+			markerElement.classList.add('marker-selected');
+		}
 		markerElement.setAttribute('aria-label', `Show details for ${stop.identifier.name}`);
 
 		const popup = new maplibregl.Popup({

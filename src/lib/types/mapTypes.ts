@@ -40,7 +40,15 @@ export type Coordinates = {
 	lng: number;
 };
 
-export type StopType = 'Restaurant' | 'Cafe' | 'Park' | 'Fuel';
+export type StopType =
+	| 'restaurant'
+	| 'gas_station'
+	| 'hotel'
+	| 'rest_area'
+	| 'charging_station'
+	| 'attraction'
+	| 'parking'
+	| 'hospital';
 
 export type RankingPriority = 'detour_distance' | 'detour_time' | 'rating';
 

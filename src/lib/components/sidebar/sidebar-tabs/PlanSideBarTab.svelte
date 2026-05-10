@@ -51,25 +51,25 @@
 		if (!trimmedQuery) return null;
 
 		const response = await fetch(
-			`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(trimmedQuery)}`
+			`/api/v1/route/search?name_search=${encodeURIComponent(trimmedQuery)}&limit=1`
 		);
 
 		if (!response.ok) {
 			throw new Error(`Geocoder request failed with status ${response.status}`);
 		}
 
-		const results: Array<{ lat: string; lon: string }> = await response.json();
+		const results: Array<{ name: string; location: { lat: number; lng: number } }> =
+			await response.json();
 		if (!results.length) {
 			return null;
 		}
 
-		const latitude = Number(results[0].lat);
-		const longitude = Number(results[0].lon);
-		if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+		const { lat, lng } = results[0].location;
+		if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
 			return null;
 		}
 
-		return { lat: latitude, lng: longitude };
+		return { lat, lng };
 	}
 
 	async function resolveStartLocation() {

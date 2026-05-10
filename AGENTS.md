@@ -6,12 +6,20 @@
 - TypeScript is strict and project config extends generated SvelteKit types from `.svelte-kit` (`tsconfig.json`).
 - Styling is Tailwind CSS v4 via Vite plugin + CSS directives, not a standalone Tailwind config file.
 
+## App Structure
+
+- The root route redirects into the onboarding flow, and `/map` is assembled as a full-screen client route from `TopAppBar`, `SideNavBar`, `InteractiveMap`, and `MobileNavigation`.
+- Shared UI is grouped by feature under `src/lib/components` (`map/`, `sidebar/`, `welcome/`, `welcome/steps/`, `sidebar/sidebar-tabs/`); keep new components in the same feature folder rather than flattening them.
+- Shared route/data types live in `src/lib/types/mapTypes.ts`; reuse those types instead of re-declaring request and response shapes in pages or components.
+
 ## Architecture and Data Flow
 
 - Route-driven UI lives under `src/routes`; root shell is `src/routes/+layout.svelte` and page content is slotted via `{@render children()}`.
 - Global styles are loaded from the root layout (`import './layout.css'`), so shared styling changes should usually start there.
 - Shared code/assets should go under `src/lib` and be imported via `$lib/...` (example: favicon import in `src/routes/+layout.svelte`).
-- Current app has no API/service layer yet; adding server logic should follow SvelteKit file conventions (`+page.server.ts`, `+server.ts`, etc.).
+- There are currently no local SvelteKit API route files in `src/routes`; the planner UI posts directly to an external/plumbed endpoint from `src/routes/map/+page.svelte`.
+- The planner endpoint path is easy to drift: `README.md` documents `/api/v1/route/plan`, while the current map page posts to `/test/temp/route/plan`. Verify the authoritative contract before editing either side.
+- Adding server logic should follow SvelteKit file conventions (`+page.server.ts`, `+server.ts`, etc.).
 
 ## Critical Workflows
 

@@ -13,7 +13,7 @@
 			id: `cfg-${Math.random().toString(36).substr(2, 9)}`,
 			targetPercent: 50,
 			stopDurationMinutes: 30,
-			stopType: 'Restaurant'
+			stopType: 'restaurant'
 		};
 	}
 
