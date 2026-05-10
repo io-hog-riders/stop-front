@@ -114,10 +114,14 @@
 			oninput={handleStopDurationInput}
 		/>
 		<select name="stopType" bind:value={stopType} oninput={handleStopTypeInput}>
-			<option>Restaurant</option>
-			<option>Cafe</option>
-			<option>Park</option>
-			<option>Fuel</option>
+			<option value="restaurant">Restaurant</option>
+			<option value="gas_station">Gas station</option>
+			<option value="hotel">Hotel</option>
+			<option value="rest_area">Rest area</option>
+			<option value="charging_station">Charging station</option>
+			<option value="attraction">Attraction</option>
+			<option value="parking">Parking</option>
+			<option value="hospital">Hospital</option>
 		</select>
 	</div>
 	<p class="font-label text-[9px] tracking-widest text-on-surface-variant uppercase">
