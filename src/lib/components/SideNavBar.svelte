@@ -29,7 +29,6 @@
 			<SideBarTab
 				title="Plan"
 				symbol="route"
-				href="/map"
 				selected={selectedTab === 'plan'}
 				onClick={() => {
 					selectedTab = 'plan';
@@ -38,7 +37,6 @@
 			<SideBarTab
 				title="Route"
 				symbol="pin_drop"
-				href="/map"
 				selected={selectedTab === 'route'}
 				onClick={() => {
 					selectedTab = 'route';

@@ -31,7 +31,6 @@
 	let stopConfigs = $state<StopConfig[]>([]);
 	let rankingPriority = $state<RankingPriority>('detour_distance');
 
-	const DEFAULT_SUGGESTION_LIMIT = 6;
 	const rankingPriorityInputId = 'ranking-priority';
 
 	function clearStartCoordinateIfNeeded() {
@@ -172,7 +171,6 @@
 			origin: originCoords,
 			destination: destinationCoords,
 			stopConfigs,
-			suggestionLimit: DEFAULT_SUGGESTION_LIMIT,
 			rankingPriority
 		});
 	}
@@ -221,7 +219,6 @@
 				bind:value={rankingPriority}
 			>
 				<option value="detour_distance">Shortest detour distance</option>
-				<option value="detour_time">Shortest detour time</option>
 				<option value="rating">Highest rating</option>
 			</select>
 		</div>
