@@ -32,7 +32,6 @@
 	function buildPopupHtml(currentStop: RouteStop, usage: UsageTypeMeta | null): string {
 		const detourKm = (currentStop.detourDistance / 1000).toFixed(1);
 		const detourMinutes = Math.max(1, Math.round(currentStop.detourTime / 60));
-		const rating = currentStop.rating?.rate ?? 0;
 		const name = escapeHtml(currentStop.identifier.name);
 		const category = escapeHtml(currentStop.identifier.type);
 		const address = escapeHtml(currentStop.identifier.address);
@@ -49,7 +48,6 @@
 				<h4 class="stop-popup-title">${name}</h4>
 				${personalizationHtml}
 				<p class="stop-popup-meta">Detour: ${detourKm} km · ${detourMinutes} min</p>
-				<p class="stop-popup-meta">Rating: ${rating.toFixed(1)} / 5</p>
 				<p class="stop-popup-address">${address}</p>
 			</div>
 		`;

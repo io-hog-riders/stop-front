@@ -14,12 +14,6 @@
 			class="font-headline text-3xl font-black tracking-tighter text-primary uppercase italic"
 			>STOPFINDER</span
 		>
-		<nav class="hidden h-full items-center gap-6 md:flex">
-			<a
-				class="flex h-full items-center border-b-4 border-primary px-2 font-headline tracking-tighter text-primary uppercase"
-				href="/map">PLANNER</a
-			>
-		</nav>
 	</div>
 	<div class="flex items-center gap-4">
 		<button
