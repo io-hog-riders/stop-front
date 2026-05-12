@@ -32,8 +32,8 @@
 		limit: number;
 	};
 
-	const DEFAULT_MAX_DETOUR_METERS = 50000;
-	const DEFAULT_PER_TYPE_LIMIT = 25;
+	const DEFAULT_MAX_DETOUR_METERS = 15000;
+	const DEFAULT_PER_TYPE_LIMIT = 10;
 
 	let isFetching = $state(false);
 	let usageModalOpen = $state(false);
