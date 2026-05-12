@@ -4,12 +4,7 @@
 	 */
 	import StopConfigList from '$lib/components/sidebar/StopConfigList.svelte';
 	import LocationEntry from '$lib/components/sidebar/LocationEntry.svelte';
-	import type {
-		Coordinates,
-		PathPlanningInput,
-		RankingPriority,
-		StopConfig
-	} from '$lib/types/mapTypes';
+	import type { Coordinates, PathPlanningInput, StopConfig } from '$lib/types/mapTypes';
 
 	type GeocodeStatus = 'idle' | 'resolving' | 'resolved' | 'not-found' | 'error';
 
@@ -29,9 +24,6 @@
 	let destinationStatus = $state<GeocodeStatus>('idle');
 	let calculateMessage = $state('');
 	let stopConfigs = $state<StopConfig[]>([]);
-	let rankingPriority = $state<RankingPriority>('detour_distance');
-
-	const rankingPriorityInputId = 'ranking-priority';
 
 	function clearStartCoordinateIfNeeded() {
 		originCoords = null;
@@ -170,8 +162,7 @@
 			destinationLocation,
 			origin: originCoords,
 			destination: destinationCoords,
-			stopConfigs,
-			rankingPriority
+			stopConfigs
 		});
 	}
 </script>
@@ -207,22 +198,6 @@
 				{/if}
 			</div>
 		</div>
-		<div class="space-y-2 border-t border-surface-variant pt-4">
-			<label
-				for={rankingPriorityInputId}
-				class="font-label text-xs font-bold tracking-widest text-primary uppercase"
-				>Ranking Priority</label
-			>
-			<select
-				id={rankingPriorityInputId}
-				class="w-full border-2 border-outline bg-black p-2 font-headline text-xs text-white uppercase outline-none focus:border-primary"
-				bind:value={rankingPriority}
-			>
-				<option value="detour_distance">Shortest detour distance</option>
-				<option value="rating">Highest rating</option>
-			</select>
-		</div>
-
 		<StopConfigList bind:stopConfigs />
 	</div>
 	<!-- Sidebar Footer CTA -->

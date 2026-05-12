@@ -64,36 +64,41 @@
 		<button
 			type="button"
 			onclick={onRemove}
-			class="font-label text-[10px] font-bold text-primary uppercase hover:text-white"
+			aria-label="Remove stop"
+			class="font-label text-[12px] font-bold text-primary uppercase hover:text-white"
 		>
-			Remove
+			X
 		</button>
 	</div>
 
 	<!-- First row: when to stop? -->
-	<div class="mb-2 space-y-1">
-		<p class="font-label text-[9px] font-bold tracking-widest text-primary opacity-80">
-			Target Route Position
-		</p>
-		<div class="flex gap-1">
-			<input
-				name="targetPercent"
-				type="number"
-				min="1"
-				max="100"
-				value={targetPercent}
-				oninput={handleTargetPercentInput}
-			/>
-			<div
-				class="flex min-w-16 items-center justify-center border-2 border-outline bg-black p-1.5 font-headline text-[10px] text-white"
+	<div class="mb-2 space-y-2">
+		<div class="flex items-center justify-between">
+			<p class="font-label text-[9px] font-bold tracking-widest text-primary opacity-80">
+				Target Route Position
+			</p>
+			<span class="font-headline text-[10px] font-bold text-white tabular-nums"
+				>{targetPercent}%</span
 			>
-				%
-			</div>
 		</div>
+		<input
+			name="targetPercent"
+			type="range"
+			min="1"
+			max="100"
+			value={targetPercent}
+			oninput={handleTargetPercentInput}
+			class="w-full"
+		/>
 	</div>
 
 	<!-- Second row: what type? -->
-	<select name="stopType" bind:value={stopType} oninput={handleStopTypeInput}>
+	<select
+		name="stopType"
+		bind:value={stopType}
+		oninput={handleStopTypeInput}
+		class="w-full"
+	>
 		<option value="restaurant">Restaurant</option>
 		<option value="gas_station">Gas station</option>
 		<option value="hotel">Hotel</option>

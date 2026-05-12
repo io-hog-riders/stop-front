@@ -71,6 +71,11 @@
 		margin: 0;
 	}
 
+	.custom-scrollbar {
+		/* Always reserve room for the scrollbar so the layout doesn't shift
+		   when content grows past the viewport height. */
+		scrollbar-gutter: stable;
+	}
 	.custom-scrollbar::-webkit-scrollbar {
 		width: 4px;
 	}

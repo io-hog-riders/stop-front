@@ -12,6 +12,7 @@
 	type Props = {
 		pathPoints: Array<[number, number]>;
 		routeStops: RouteStop[];
+		selectedRouteStops?: RouteStop[];
 		isFetching?: boolean;
 		appliedUsageType?: UsageTypeMeta | null;
 		missingStopsEvent?: { id: number; types: StopType[] } | null;
@@ -21,12 +22,12 @@
 	let {
 		pathPoints,
 		routeStops,
+		selectedRouteStops = [],
 		isFetching = false,
 		appliedUsageType = null,
 		missingStopsEvent = null,
 		onSelectedRouteStopsChange
 	}: Props = $props();
-	let selectedRouteStops: RouteStop[] = $state([]);
 	let stopSelectionEventId = 0;
 	let latestStopSelectionEvent: {
 		id: number;
@@ -49,7 +50,6 @@
 			const nextSelectedRouteStops = selectedRouteStops.filter(
 				(selectedStop) => selectedStop.identifier.id !== stop.identifier.id
 			);
-			selectedRouteStops = nextSelectedRouteStops;
 			onSelectedRouteStopsChange?.(nextSelectedRouteStops);
 			latestStopSelectionEvent = {
 				id: ++stopSelectionEventId,
@@ -60,7 +60,6 @@
 		}
 
 		const nextSelectedRouteStops = [...selectedRouteStops, stop];
-		selectedRouteStops = nextSelectedRouteStops;
 		onSelectedRouteStopsChange?.(nextSelectedRouteStops);
 		latestStopSelectionEvent = {
 			id: ++stopSelectionEventId,

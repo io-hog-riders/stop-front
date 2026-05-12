@@ -8,9 +8,16 @@
 		selectedRouteStops?: RouteStop[];
 		pathPoints?: Array<[number, number]>;
 		routeDistance?: number;
+		onSelectedRouteStopsChange?: (selectedStops: RouteStop[]) => void;
 	};
 
-	let { onCalculatePath, selectedRouteStops = [], pathPoints = [], routeDistance = 0 }: Props = $props();
+	let {
+		onCalculatePath,
+		selectedRouteStops = [],
+		pathPoints = [],
+		routeDistance = 0,
+		onSelectedRouteStopsChange
+	}: Props = $props();
 	let selectedTab: 'plan' | 'route' = $state('plan');
 </script>
 
@@ -21,7 +28,6 @@
 		<h2 class="font-headline text-xl font-black tracking-tighter text-primary uppercase">
 			TRIP PARAMETERS
 		</h2>
-		<p class="font-label text-xs text-on-surface-variant">V1.0-OUTLAW</p>
 	</div>
 	<div class="flex-1">
 		<!-- Navigation Links -->
@@ -44,11 +50,18 @@
 			/>
 		</div>
 	</div>
-	<div class="custom-scrollbar overflow-scroll">
-		{#if selectedTab === 'plan'}
+	<div class="custom-scrollbar overflow-x-hidden overflow-y-auto">
+		<!-- Both tabs stay mounted so their inputs persist across switches. -->
+		<div class:hidden={selectedTab !== 'plan'}>
 			<PlanSideBarTab {onCalculatePath} />
-		{:else}
-			<RouteSideBarTab {selectedRouteStops} {pathPoints} {routeDistance} />
-		{/if}
+		</div>
+		<div class:hidden={selectedTab !== 'route'}>
+			<RouteSideBarTab
+				{selectedRouteStops}
+				{pathPoints}
+				{routeDistance}
+				{onSelectedRouteStopsChange}
+			/>
+		</div>
 	</div>
 </aside>

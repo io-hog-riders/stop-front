@@ -29,9 +29,6 @@ export type RouteStop = {
 	detourTime: number; // in seconds
 	identifier: RouteStopIdentifier;
 	openingHours: RouteStopWeeklyOpeningHours;
-	rating: {
-		rate: number; // 0-5
-	};
 	website: string;
 };
 
@@ -50,8 +47,6 @@ export type StopType =
 	| 'parking'
 	| 'hospital';
 
-export type RankingPriority = 'detour_distance' | 'rating';
-
 export type StopConfig = {
 	id: string;
 	targetPercent: number; // 0-100 of route progress
@@ -64,5 +59,4 @@ export type PathPlanningInput = {
 	origin: Coordinates;
 	destination: Coordinates;
 	stopConfigs: StopConfig[];
-	rankingPriority: RankingPriority;
 };

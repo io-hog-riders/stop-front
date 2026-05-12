@@ -9,13 +9,7 @@
 
 	import { usagePreference } from '$lib/stores/usagePreference.svelte';
 
-	import type {
-		PathPlanningInput,
-		RankingPriority,
-		RouteStop,
-		StopConfig,
-		StopType
-	} from '$lib/types/mapTypes';
+	import type { PathPlanningInput, RouteStop, StopConfig, StopType } from '$lib/types/mapTypes';
 	type RoutePlanResponse = {
 		route?: {
 			points?: Array<{ lng: number; lat: number }>;
@@ -26,7 +20,6 @@
 			detourTime: number;
 			ident: RouteStop['identifier'];
 			openingHours: RouteStop['openingHours'];
-			rating: RouteStop['rating'];
 			website: string;
 		}>;
 	};
@@ -37,16 +30,10 @@
 		atJourneyMinute: number;
 		maxDetour: number;
 		limit: number;
-		sortBy: 'distance' | 'rating' | 'price';
 	};
 
 	const DEFAULT_MAX_DETOUR_METERS = 50000;
 	const DEFAULT_PER_TYPE_LIMIT = 25;
-
-	function rankingToSortBy(priority: RankingPriority): StopOptionsPayload['sortBy'] {
-
-		return priority === 'rating' ? 'rating' : 'distance';
-	}
 
 	let isFetching = $state(false);
 	let usageModalOpen = $state(false);
@@ -54,6 +41,11 @@
 	let appliedUsageType = $state<ReturnType<typeof usagePreference.meta>>(null);
 	let missingStopsEvent = $state<{ id: number; types: StopType[] } | null>(null);
 	let missingStopsEventId = 0;
+
+	// When a selection-driven recalc arrives while another fetch is in flight,
+	// we stash the latest request and re-fire it after the current one finishes
+	// — so every click on a stop is reflected in the route line.
+	let pendingRecalc: { input: PathPlanningInput; preserveStops: boolean } | null = null;
 
 	onMount(() => {
 		if (!usagePreference.hasSeenPrompt) {
@@ -78,9 +70,10 @@
 
 	function handleSelectedRouteStopsChange(nextSelectedRouteStops: RouteStop[]) {
 		selectedRouteStops = nextSelectedRouteStops;
-		if (lastPlanningInput && !isFetching) {
-			// Only redraw the route line through the new waypoint — keep the
-			// previously-found suggested stops on the map.
+		if (lastPlanningInput) {
+			// Redraw the route line through the updated selection. If a fetch is
+			// already in flight, handleCalculatePath will queue this and run it
+			// when the current one settles.
 			handleCalculatePath(lastPlanningInput, { preserveStops: true });
 		}
 	}
@@ -95,7 +88,6 @@
 			detourTime: stop.detourTime,
 			identifier: stop.ident,
 			openingHours: stop.openingHours,
-			rating: stop.rating,
 			website: stop.website
 		}));
 	};
@@ -104,7 +96,11 @@
 		planningInput: PathPlanningInput,
 		{ preserveStops = false }: { preserveStops?: boolean } = {}
 	) {
-		if (isFetching) return;
+		if (isFetching) {
+			// Latest pending wins — older queued requests are stale.
+			pendingRecalc = { input: planningInput, preserveStops };
+			return;
+		}
 
 		lastPlanningInput = planningInput;
 		isFetching = true;
@@ -122,7 +118,6 @@
 		}
 		waypoints.push(planningInput.destination);
 
-		const sortBy = rankingToSortBy(planningInput.rankingPriority);
 		const stopOptions: StopOptionsPayload[] = preserveStops
 			? []
 			: planningInput.stopConfigs.map((cfg) => ({
@@ -130,8 +125,7 @@
 					targetPercent: cfg.targetPercent,
 					atJourneyMinute: 0,
 					maxDetour: DEFAULT_MAX_DETOUR_METERS,
-					limit: DEFAULT_PER_TYPE_LIMIT,
-					sortBy
+					limit: DEFAULT_PER_TYPE_LIMIT
 				}));
 
 		const person = usagePreference.current;
@@ -187,6 +181,11 @@
 			console.error(`Could not fetch route preview: ${details}`);
 		} finally {
 			isFetching = false;
+			if (pendingRecalc) {
+				const next = pendingRecalc;
+				pendingRecalc = null;
+				handleCalculatePath(next.input, { preserveStops: next.preserveStops });
+			}
 		}
 	}
 </script>
@@ -202,10 +201,12 @@
 		{selectedRouteStops}
 		{pathPoints}
 		{routeDistance}
+		onSelectedRouteStopsChange={handleSelectedRouteStopsChange}
 	/>
 	<InteractiveMap
 		{pathPoints}
 		{routeStops}
+		{selectedRouteStops}
 		{isFetching}
 		{appliedUsageType}
 		{missingStopsEvent}
