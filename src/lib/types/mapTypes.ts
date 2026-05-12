@@ -50,12 +50,11 @@ export type StopType =
 	| 'parking'
 	| 'hospital';
 
-export type RankingPriority = 'detour_distance' | 'detour_time' | 'rating';
+export type RankingPriority = 'detour_distance' | 'rating';
 
 export type StopConfig = {
 	id: string;
 	targetPercent: number; // 0-100 of route progress
-	stopDurationMinutes: number;
 	stopType: StopType;
 };
 
@@ -65,6 +64,5 @@ export type PathPlanningInput = {
 	origin: Coordinates;
 	destination: Coordinates;
 	stopConfigs: StopConfig[];
-	suggestionLimit: number;
 	rankingPriority: RankingPriority;
 };

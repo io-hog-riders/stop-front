@@ -4,33 +4,24 @@
 	type Props = {
 		index: string;
 		targetPercent: number;
-		stopDurationMinutes: number;
 		stopType: StopType;
 		onRemove?: () => void;
 		onTargetPercentChange?: (value: number) => void;
-		onStopDurationMinutesChange?: (value: number) => void;
 		onStopTypeChange?: (value: StopType) => void;
 	};
 
 	let {
 		index,
 		targetPercent,
-		stopDurationMinutes,
 		stopType,
 		onRemove,
 		onTargetPercentChange,
-		onStopDurationMinutesChange,
 		onStopTypeChange
 	}: Props = $props();
 
 	function handleTargetPercentInput(event: Event) {
 		const target = event.target as HTMLInputElement;
 		onTargetPercentChange?.(Number(target.value));
-	}
-
-	function handleStopDurationInput(event: Event) {
-		const target = event.target as HTMLInputElement;
-		onStopDurationMinutesChange?.(Number(target.value));
 	}
 
 	function handleStopTypeInput(event: Event) {
@@ -101,30 +92,15 @@
 		</div>
 	</div>
 
-	<!-- Second row: how to stop? -->
-	<div class="grid grid-cols-2 gap-2">
-		<input
-			name="stopDurationMinutes"
-			aria-label="Stop duration in minutes"
-			type="number"
-			min="5"
-			max="240"
-			step="5"
-			value={stopDurationMinutes}
-			oninput={handleStopDurationInput}
-		/>
-		<select name="stopType" bind:value={stopType} oninput={handleStopTypeInput}>
-			<option value="restaurant">Restaurant</option>
-			<option value="gas_station">Gas station</option>
-			<option value="hotel">Hotel</option>
-			<option value="rest_area">Rest area</option>
-			<option value="charging_station">Charging station</option>
-			<option value="attraction">Attraction</option>
-			<option value="parking">Parking</option>
-			<option value="hospital">Hospital</option>
-		</select>
-	</div>
-	<p class="font-label text-[9px] tracking-widest text-on-surface-variant uppercase">
-		Duration in minutes
-	</p>
+	<!-- Second row: what type? -->
+	<select name="stopType" bind:value={stopType} oninput={handleStopTypeInput}>
+		<option value="restaurant">Restaurant</option>
+		<option value="gas_station">Gas station</option>
+		<option value="hotel">Hotel</option>
+		<option value="rest_area">Rest area</option>
+		<option value="charging_station">Charging station</option>
+		<option value="attraction">Attraction</option>
+		<option value="parking">Parking</option>
+		<option value="hospital">Hospital</option>
+	</select>
 </div>

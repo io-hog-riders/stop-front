@@ -1,5 +1,9 @@
 <script lang="ts">
-	// TopAppBar for the application
+	import { usagePreference } from '$lib/stores/usagePreference.svelte';
+	import UsageTypeModal from './UsageTypeModal.svelte';
+
+	let usageModalOpen = $state(false);
+	let activeMeta = $derived(usagePreference.meta());
 </script>
 
 <header
@@ -15,25 +19,23 @@
 				class="flex h-full items-center border-b-4 border-primary px-2 font-headline tracking-tighter text-primary uppercase"
 				href="/map">PLANNER</a
 			>
-			<a
-				class="flex h-full items-center px-2 font-headline tracking-tighter text-white uppercase transition-none hover:bg-primary hover:text-black"
-				href="/map">HISTORY</a
-			>
-			<a
-				class="flex h-full items-center px-2 font-headline tracking-tighter text-white uppercase transition-none hover:bg-primary hover:text-black"
-				href="/map">FLEET</a
-			>
 		</nav>
 	</div>
 	<div class="flex items-center gap-4">
-		<button class="p-2 text-white transition-none hover:bg-primary hover:text-black">
-			<span class="material-symbols-outlined">search</span>
-		</button>
-		<button class="p-2 text-white transition-none hover:bg-primary hover:text-black">
-			<span class="material-symbols-outlined">account_circle</span>
-		</button>
-		<button class="p-2 text-white transition-none hover:bg-primary hover:text-black">
-			<span class="material-symbols-outlined">settings</span>
+		<button
+			type="button"
+			onclick={() => (usageModalOpen = true)}
+			class="flex items-center gap-2 border-[3px] border-primary bg-[#0e0e0e] px-3 py-2 font-headline text-xs font-black tracking-wider text-primary uppercase transition-none hover:bg-primary hover:text-black"
+			aria-label="Change usage type"
+		>
+			<span class="material-symbols-outlined text-base">
+				{activeMeta?.icon ?? 'tune'}
+			</span>
+			<span class="hidden sm:inline">
+				{activeMeta ? activeMeta.title : 'Set Usage'}
+			</span>
 		</button>
 	</div>
 </header>
+
+<UsageTypeModal bind:open={usageModalOpen} />

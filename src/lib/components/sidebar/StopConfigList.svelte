@@ -12,7 +12,6 @@
 		return {
 			id: `cfg-${Math.random().toString(36).substr(2, 9)}`,
 			targetPercent: 50,
-			stopDurationMinutes: 30,
 			stopType: 'restaurant'
 		};
 	}
@@ -29,13 +28,6 @@
 		const normalizedPercent = Math.min(100, Math.max(1, Math.round(value || 1)));
 		stopConfigs = stopConfigs.map((config) =>
 			config.id === id ? { ...config, targetPercent: normalizedPercent } : config
-		);
-	}
-
-	function updateStopConfigDuration(id: string, value: number) {
-		const normalizedDuration = Math.min(240, Math.max(5, Math.round(value || 5)));
-		stopConfigs = stopConfigs.map((config) =>
-			config.id === id ? { ...config, stopDurationMinutes: normalizedDuration } : config
 		);
 	}
 
@@ -70,11 +62,9 @@
 		<StopConfigEntry
 			index={(idx + 1).toString().padStart(2, '0')}
 			targetPercent={config.targetPercent}
-			stopDurationMinutes={config.stopDurationMinutes}
 			stopType={config.stopType}
 			onRemove={() => removeStopConfig(config.id)}
 			onTargetPercentChange={(value) => updateStopConfigPercent(config.id, value)}
-			onStopDurationMinutesChange={(value) => updateStopConfigDuration(config.id, value)}
 			onStopTypeChange={(value) => updateStopConfigType(config.id, value)}
 		/>
 	{/each}

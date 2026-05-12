@@ -1,15 +1,23 @@
 <script lang="ts">
 	import maplibregl from 'maplibre-gl';
 	import type { RouteStop } from '$lib/types/mapTypes';
+	import type { UsageTypeMeta } from '$lib/stores/usagePreference.svelte';
 
 	type Props = {
 		map: maplibregl.Map | null;
 		stop: RouteStop;
 		isSelected?: boolean;
+		appliedUsageType?: UsageTypeMeta | null;
 		onSelected?: (stop: RouteStop) => void | Promise<void>;
 	};
 
-	let { map, stop, isSelected = false, onSelected }: Props = $props();
+	let {
+		map,
+		stop,
+		isSelected = false,
+		appliedUsageType = null,
+		onSelected
+	}: Props = $props();
 	const POPUP_ANIMATION_MS = 180;
 
 	function escapeHtml(input: string): string {
@@ -21,7 +29,7 @@
 			.replaceAll("'", '&#39;');
 	}
 
-	function buildPopupHtml(currentStop: RouteStop): string {
+	function buildPopupHtml(currentStop: RouteStop, usage: UsageTypeMeta | null): string {
 		const detourKm = (currentStop.detourDistance / 1000).toFixed(1);
 		const detourMinutes = Math.max(1, Math.round(currentStop.detourTime / 60));
 		const rating = currentStop.rating?.rate ?? 0;
@@ -29,10 +37,17 @@
 		const category = escapeHtml(currentStop.identifier.type);
 		const address = escapeHtml(currentStop.identifier.address);
 
+		// Backend personalizes restaurants only — show the tag that was applied.
+		const showsPersonalization = usage && currentStop.identifier.type === 'restaurant';
+		const personalizationHtml = showsPersonalization
+			? `<p class="stop-popup-badge"><span class="material-symbols-outlined">${escapeHtml(usage.icon)}</span>${escapeHtml(usage.badge)}</p>`
+			: '';
+
 		return `
 			<div class="stop-popup-card">
 				<p class="stop-popup-label">${category}</p>
 				<h4 class="stop-popup-title">${name}</h4>
+				${personalizationHtml}
 				<p class="stop-popup-meta">Detour: ${detourKm} km · ${detourMinutes} min</p>
 				<p class="stop-popup-meta">Rating: ${rating.toFixed(1)} / 5</p>
 				<p class="stop-popup-address">${address}</p>
@@ -66,7 +81,7 @@
 			className: 'stop-popup'
 		})
 			.setLngLat([lng, lat])
-			.setHTML(buildPopupHtml(stop));
+			.setHTML(buildPopupHtml(stop, appliedUsageType));
 
 		let hideTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -207,6 +222,25 @@
 		font-weight: 800;
 		text-transform: uppercase;
 		color: #fff;
+	}
+
+	:global(.stop-popup-badge) {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		margin: 0.45rem 0 0;
+		padding: 0.2rem 0.45rem;
+		border: 2px solid var(--color-primary);
+		background: var(--color-primary);
+		color: #0a0a0a;
+		font-size: 0.65rem;
+		font-weight: 800;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+
+	:global(.stop-popup-badge .material-symbols-outlined) {
+		font-size: 0.95rem;
 	}
 
 	:global(.stop-popup-meta) {

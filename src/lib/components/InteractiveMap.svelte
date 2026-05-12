@@ -4,15 +4,17 @@
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import MapControls from './map/MapControls.svelte';
-	import CoordinatesOverlay from './map/CoordinatesOverlay.svelte';
 	import StopMarker from './map/StopMarker.svelte';
 	import StopSelectionNotifications from './map/StopSelectionNotifications.svelte';
-	import type { RouteStop } from '$lib/types/mapTypes';
+	import type { RouteStop, StopType } from '$lib/types/mapTypes';
+	import type { UsageTypeMeta } from '$lib/stores/usagePreference.svelte';
 
 	type Props = {
 		pathPoints: Array<[number, number]>;
 		routeStops: RouteStop[];
 		isFetching?: boolean;
+		appliedUsageType?: UsageTypeMeta | null;
+		missingStopsEvent?: { id: number; types: StopType[] } | null;
 		onSelectedRouteStopsChange?: (selectedStops: RouteStop[]) => void;
 	};
 
@@ -20,6 +22,8 @@
 		pathPoints,
 		routeStops,
 		isFetching = false,
+		appliedUsageType = null,
+		missingStopsEvent = null,
 		onSelectedRouteStopsChange
 	}: Props = $props();
 	let selectedRouteStops: RouteStop[] = $state([]);
@@ -30,8 +34,6 @@
 		variant: 'selected' | 'deselected';
 	} | null = $state(null);
 	let mapContainer: HTMLElement;
-	let lng = $state(-87.6298);
-	let lat = $state(41.8781);
 	let mapInstance = $state<maplibregl.Map | null>(null);
 	let mapLoaded = $state(false);
 	let startMarker: maplibregl.Marker | null = null;
@@ -82,11 +84,6 @@
 
 		map.on('load', () => {
 			mapLoaded = true;
-		});
-
-		map.on('mousemove', (e) => {
-			lng = e.lngLat.lng;
-			lat = e.lngLat.lat;
 		});
 
 		mapInstance = map;
@@ -184,7 +181,10 @@
 		class="relative h-full w-full overflow-hidden border-[3px] border-white bg-surface-container-low"
 	>
 		<div bind:this={mapContainer} class="h-full w-full bg-black"></div>
-		<StopSelectionNotifications selectionEvent={latestStopSelectionEvent} />
+		<StopSelectionNotifications
+			selectionEvent={latestStopSelectionEvent}
+			{missingStopsEvent}
+		/>
 		<MapControls onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} />
 		{#if isFetching}
 			<div
@@ -202,6 +202,7 @@
 				<StopMarker
 					map={mapInstance}
 					{stop}
+					{appliedUsageType}
 					isSelected={selectedRouteStops.some(
 						(selected) => selected.identifier.id === stop.identifier.id
 					)}
@@ -210,7 +211,6 @@
 			{/each}
 		{/if}
 	</div>
-	<CoordinatesOverlay {lat} {lng} />
 </main>
 
 <style>
